@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_compile_options(-Wall -Wextra -Wconversion -Wshadow)
 
+add_subdirectory(src/game)
 add_subdirectory(src)
 
 enable_testing()

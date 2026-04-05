@@ -42,3 +42,6 @@
 
 # build location
 build/
+
+# CTest testing folder
+Testing/

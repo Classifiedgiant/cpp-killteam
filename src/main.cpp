@@ -28,7 +28,7 @@ int main()
         [&createGameController] (const drogon::HttpRequestPtr& req,
             std::function<void(const drogon::HttpResponsePtr&)>&& callback)
             {
-                createGameController->asyncHandleHttpRequest(req, std::move(callback));
+                createGameController->joinGame(req, std::move(callback));
             }
     );
     drogonApp.run();

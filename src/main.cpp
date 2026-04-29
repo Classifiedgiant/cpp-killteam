@@ -29,7 +29,8 @@ int main()
             std::function<void(const drogon::HttpResponsePtr&)>&& callback)
             {
                 createGameController->joinGame(req, std::move(callback));
-            }
+            },
+        {drogon::Post}
     );
     drogonApp.run();
 

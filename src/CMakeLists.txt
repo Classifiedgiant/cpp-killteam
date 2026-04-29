@@ -4,12 +4,12 @@ add_executable(${PROJECT_NAME}
     main.cpp
 
     # Controllers
-    server/CreateGameController.cpp
+    server/controllers/CreateGameController.cpp
     )
 
 target_include_directories(${PROJECT_NAME}
 PRIVATE
-    server)
+    server/controllers)
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE

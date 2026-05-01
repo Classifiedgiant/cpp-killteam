@@ -1,3 +1,6 @@
+#ifndef KILLTEAM_SRC_SERVER_CONTROLLERS_GAMEWSCONTROLLERS_H_
+#define KILLTEAM_SRC_SERVER_CONTROLLERS_GAMEWSCONTROLLERS_H_
+
 #include <drogon/WebSocketController.h>
 #include <drogon/HttpAppFramework.h>
 
@@ -20,3 +23,5 @@ class  GameWsController : public drogon::WebSocketController<GameWsController, f
 };
 
 }
+
+#endif

@@ -5,6 +5,7 @@ add_executable(${PROJECT_NAME}
 
     # Controllers
     server/controllers/CreateGameController.cpp
+    server/controllers/GameWSController.cpp
     )
 
 target_include_directories(${PROJECT_NAME}

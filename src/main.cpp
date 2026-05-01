@@ -4,14 +4,17 @@
 #include <drogon/drogon.h>
 
 #include "CreateGameController.hpp"
+#include "GameWSController.hpp"
 #include "Game.hpp"
 
 
+std::unique_ptr<Game::Game> game = std::make_unique<Game::Game>();
+
 int main()
 {
-    auto game = std::make_unique<Game::Game>();
 
     auto createGameController = std::make_shared<Controllers::CreateGameController>(*game);
+    auto gameWsController = std::make_shared<Controllers::GameWsController>();
 
     std::cout << "Starting the server...\n";
     auto& drogonApp = drogon::app();
@@ -32,6 +35,10 @@ int main()
             },
         {drogon::Post}
     );
+
+    drogonApp.registerWebSocketController("/game", "Controllers::GameWsController");
+    drogonApp.registerWebSocketControllerRegex("/game/[^/]*", "Controllers::GameWsController");
+
     drogonApp.run();
 
     return 0;

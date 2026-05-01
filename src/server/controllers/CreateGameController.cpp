@@ -21,5 +21,7 @@ void Controllers::CreateGameController::joinGame(const drogon::HttpRequestPtr& r
         playerJoined ? Json::Value("Added Value") : Json::Value("Failed to add player")
     );
     resp->setStatusCode(playerJoined ? drogon::k200OK : drogon::k400BadRequest);
+
+    // send a websocket connection for game related
     callback(resp);
 }

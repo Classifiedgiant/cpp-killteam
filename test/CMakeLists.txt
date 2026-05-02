@@ -5,7 +5,11 @@ include(CTest)
 include(Catch)
 
 add_executable(${PROJECT_NAME}
-    game/game.test.cpp)
+    game/Game.Test.cpp
+
+    # Controllers
+    server/controllers/CreateGameController.Test.cpp)
+
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE

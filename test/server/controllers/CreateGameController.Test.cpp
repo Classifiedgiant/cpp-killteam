@@ -45,7 +45,7 @@ TEST_CASE("joinGame returns 400 when JSON body is invalid")
     CHECK(resp->getStatusCode() == drogon::k400BadRequest);
 }
 
-TEST_CASE("joinGame returns 200 and a gameSessionId on success")
+TEST_CASE("joinGame returns 200, gameId, wsToken, playerPosition on success")
 {
     Game::Game game;
     Controllers::CreateGameController sut{game};
@@ -60,14 +60,17 @@ TEST_CASE("joinGame returns 200 and a gameSessionId on success")
     CHECK(resp->getStatusCode() == drogon::k200OK);
     const auto json = resp->getJsonObject();
     REQUIRE(json != nullptr);
-    CHECK(json->isMember("gameSessionId"));
+    CHECK(json->isMember("gameId"));
+    CHECK(json->isMember("wsToken"));
+    CHECK(json->isMember("playerPosition"));
+    CHECK((*json)["playerPosition"].asInt() == 1);
 }
 
 TEST_CASE("joinGame returns 400 when game rejects player")
 {
     Game::Game game;
-    REQUIRE(game.joinPlayer(1));
-    REQUIRE(game.joinPlayer(2));
+    game.joinPlayer(1, "abc", "def");
+    game.joinPlayer(2, "ghi", "jkl");
 
     Controllers::CreateGameController sut{game};
 
@@ -79,4 +82,23 @@ TEST_CASE("joinGame returns 400 when game rejects player")
 
     REQUIRE(resp != nullptr);
     CHECK(resp->getStatusCode() == drogon::k400BadRequest);
+}
+
+TEST_CASE("joinGame returns 400 when same player attempts to join more than once")
+{
+    Game::Game game;
+    Controllers::CreateGameController sut{game};
+
+    Json::Value body;
+    body["userId"] = "1";
+    auto req = drogon::HttpRequest::newHttpJsonRequest(body);
+
+    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k200OK);
+    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k400BadRequest);
+
+    // player position
+    body["userId"] = "2";
+    req = drogon::HttpRequest::newHttpJsonRequest(body);
+    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k200OK);
+    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k400BadRequest);
 }

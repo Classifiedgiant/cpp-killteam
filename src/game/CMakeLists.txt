@@ -1,7 +1,8 @@
 project(GameLib LANGUAGES CXX)
 
 add_library(${PROJECT_NAME}
-    Game.cpp)
+    Game.cpp
+    Player.cpp)
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC

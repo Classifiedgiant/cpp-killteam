@@ -1,6 +1,7 @@
 #include "CreateGameController.hpp"
 
 #include "RandomGenerator.hpp"
+#include "ControllerHelper.hpp"
 
 void Controllers::CreateGameController::joinGame(const drogon::HttpRequestPtr& req,
                                     std::function<void (const drogon::HttpResponsePtr &)> &&callback)
@@ -10,26 +11,31 @@ void Controllers::CreateGameController::joinGame(const drogon::HttpRequestPtr& r
     {
         Json::Value errorJson{};
         errorJson["error"] = "missing UserId";
-        const auto response = drogon::HttpResponse::newHttpJsonResponse(errorJson);
-        response->setStatusCode(drogon::k400BadRequest);
-        callback(response);
+        callback(Util::Create400JsonResponse(errorJson));
         return;
     }
 
-    const auto userId = (*json)["userId"].asString();
-    if (const auto playerJoined = game_.joinPlayer(std::stoi(userId)); !playerJoined)
+    const auto userId = std::stoi((*json)["userId"].asString());
+    if (game_.IsPlayerInGame(userId) || game_.IsFull())
     {
         Json::Value errorJson{};
         errorJson["error"] = "Failed to add player";
-        const auto resp = drogon::HttpResponse::newHttpJsonResponse(errorJson);
-        resp->setStatusCode(drogon::k400BadRequest);
-        callback(resp);
+        callback(Util::Create400JsonResponse(errorJson));
     }
     else
     {
         // send a websocket connection for game related
         Json::Value returnJson{};
-        returnJson["gameSessionId"] = Util::GenerateAlphaNumericString(5);
+
+
+        const auto gameId = Util::GenerateAlphaNumericString(5);
+        const auto wsToken = Util::GenerateAlphaNumericString(10);
+        game_.joinPlayer(userId, wsToken, gameId);
+
+        game_.SetGameId(gameId);
+        returnJson["gameId"] =  game_.GetGameId();
+        returnJson["wsToken"] = wsToken;
+        returnJson["playerPosition"] = game_.IsFull() ? 2 : 1 ;
         const auto resp = drogon::HttpResponse::newHttpJsonResponse(returnJson);
         callback(resp);
     }

@@ -2,20 +2,32 @@
 #define KILLTEAM_SRC_GAME_GAMESTATE
 
 #include <optional>
+#include <string>
+#include <string_view>
 #include <utility>
+
+#include "Player.hpp"
 
 namespace Game
 {
 class Game
 {
-std::pair<std::optional<unsigned int>, std::optional<unsigned int>> players_;
+std::string gameId_;
+std::string connectionToken_;
+
+std::pair<std::optional<Player>, std::optional<Player>> players_;
 
 public:
 Game();
 
-[[nodiscard]] bool joinPlayer(unsigned int player) noexcept;
+[[nodiscard]] bool IsPlayerInGame(std::uint32_t playerId) noexcept;
+[[nodiscard]] bool IsFull() noexcept;
 
-[[nodiscard]] bool hasAllPlayers() const noexcept;
+void joinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept;
+
+std::string GetGameId() const noexcept { return gameId_; };
+void SetGameId(const std::string gameId);
+
 };
 }
 

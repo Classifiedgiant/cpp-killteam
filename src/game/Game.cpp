@@ -26,7 +26,7 @@ Game::Game::Game()
     return players_.first.has_value() && players_.second.has_value();
 }
 
-void Game::Game::joinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept
+void Game::Game::JoinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept
 {
     if (IsFull())
     {
@@ -46,6 +46,23 @@ void Game::Game::joinPlayer(std::uint32_t playerId, std::string gameConnectionTo
         players_.first = Player(playerId, gameConnectionToken, gameId, 1);
 }
 
+[[nodiscard]] std::optional<Game::Player> Game::Game::GetPlayer(unsigned int player) noexcept
+{
+    switch (player)
+    {
+        case 1:
+            return players_.first;
+        case 2:
+            return players_.second;
+
+        default:
+        {
+            std::cout << "Player " << player << " not found.\n";
+            return {};
+        }
+    }
+}
+
 void Game::Game::SetGameId(const std::string gameId)
 {
     if (!this->gameId_.empty())
@@ -55,4 +72,32 @@ void Game::Game::SetGameId(const std::string gameId)
     }
 
     gameId_  = gameId;
+}
+
+std::pair<bool, std::string> Game::Game::ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition)
+{
+
+    if (wsToken.empty() || playerPosition.empty())
+        return {false, "Player Token or Player position is empty"};
+
+    try
+    {
+
+        const auto playerPos = static_cast<unsigned int>(std::stoull(std::string(playerPosition)));
+        const auto player = GetPlayer(playerPos);
+
+        if (!player)
+            return {false, "Player not in game"};
+
+        if (player->GetConnectionToken() != wsToken)
+            return {false, "Player can't access game"};
+    }
+    catch (const std::exception& ex)
+    {
+        std::cout << "Unable to pass player position: " << playerPosition << "\n";
+        return {false, "Player not in game"};
+    }
+
+    return {true, ""};
+
 }

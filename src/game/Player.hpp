@@ -20,7 +20,7 @@ public:
     Player(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId, std::uint8_t playerPosition);
 
     std::uint32_t GetPlayerId() const { return playerId_; };
-    std::string GetConnectioToken() const { return gameConnectionToken_; };
+    std::string GetConnectionToken() const { return gameConnectionToken_; };
     std::string_view GetGameId() const { return gameId_; };
     std::uint8_t GetPlayerPosition() const { return playerPosition_; };
 };

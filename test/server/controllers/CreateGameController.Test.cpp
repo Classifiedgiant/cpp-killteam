@@ -69,8 +69,8 @@ TEST_CASE("joinGame returns 200, gameId, wsToken, playerPosition on success")
 TEST_CASE("joinGame returns 400 when game rejects player")
 {
     Game::Game game;
-    game.joinPlayer(1, "abc", "def");
-    game.joinPlayer(2, "ghi", "jkl");
+    game.JoinPlayer(1, "abc", "def");
+    game.JoinPlayer(2, "ghi", "jkl");
 
     Controllers::CreateGameController sut{game};
 

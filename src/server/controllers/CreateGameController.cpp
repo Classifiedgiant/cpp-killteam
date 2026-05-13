@@ -30,12 +30,12 @@ void Controllers::CreateGameController::joinGame(const drogon::HttpRequestPtr& r
 
         const auto gameId = Util::GenerateAlphaNumericString(5);
         const auto wsToken = Util::GenerateAlphaNumericString(10);
-        game_.joinPlayer(userId, wsToken, gameId);
+        game_.JoinPlayer(userId, wsToken, gameId);
 
         game_.SetGameId(gameId);
         returnJson["gameId"] =  game_.GetGameId();
         returnJson["wsToken"] = wsToken;
-        returnJson["playerPosition"] = game_.IsFull() ? 2 : 1 ;
+        returnJson["playerPosition"] = game_.IsFull() ? 2 : 1;
         const auto resp = drogon::HttpResponse::newHttpJsonResponse(returnJson);
         callback(resp);
     }

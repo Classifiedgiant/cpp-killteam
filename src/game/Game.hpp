@@ -1,5 +1,5 @@
-#ifndef KILLTEAM_SRC_GAME_GAMESTATE
-#define KILLTEAM_SRC_GAME_GAMESTATE
+#ifndef KILLTEAM_SRC_GAME_GAMESTATE_H
+#define KILLTEAM_SRC_GAME_GAMESTATE_H
 
 #include <optional>
 #include <string>
@@ -23,12 +23,16 @@ Game();
 [[nodiscard]] bool IsPlayerInGame(std::uint32_t playerId) noexcept;
 [[nodiscard]] bool IsFull() noexcept;
 
-void joinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept;
+void JoinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept;
+
+[[nodiscard]] std::optional<Player> GetPlayer(unsigned int player) noexcept;
 
 std::string GetGameId() const noexcept { return gameId_; };
 void SetGameId(const std::string gameId);
 
+std::pair<bool, std::string> ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition);
 };
 }
+
 
 #endif

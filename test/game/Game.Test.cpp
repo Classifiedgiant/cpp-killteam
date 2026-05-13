@@ -12,8 +12,11 @@ auto CreatePlayer(std::uint32_t playerId)
 }
 
 void JoinPlayer(Game::Game& sut, auto args) {
-    std::apply([&sut](auto&&... playerArgs) { sut.joinPlayer(playerArgs...); }, args);
+    std::apply([&sut](auto&&... playerArgs) { sut.JoinPlayer(playerArgs...); }, args);
 }
+
+// Test Constants
+const std::string gameId = "asdfs10";
 
 TEST_CASE("Game does not have all players without a join")
 {
@@ -51,10 +54,49 @@ TEST_CASE("Game cannot join more than two players")
     JoinPlayer(sut, CreatePlayer(2));
     CHECK(sut.IsFull());
 
-
     JoinPlayer(sut, CreatePlayer(4));
     CHECK_FALSE(sut.IsPlayerInGame(4));
 }
 
+TEST_CASE("Player websocket connections fails when either token or playerPositions it empty")
+{
+    Game::Game sut{};
+
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("", "randomVal").first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("ablsdofdsfo", "").first);
+}
+
+TEST_CASE("Player websocket connections fails when either playerPosition is not convertable to values 1 or 2")
+{
+    Game::Game sut{};
+
+    // fill the game with players
+    sut.JoinPlayer(1234, "abc", gameId);
+    sut.JoinPlayer(102, "def", gameId);
+
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "10239").first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "abc").first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "abc1").first);
+}
+
+TEST_CASE("Player websocket connections fails when token doesn't match token")
+{
+    Game::Game sut{};
+
+    sut.JoinPlayer(1234, "abc", gameId);
+
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("def", "1").first);
+}
+
+TEST_CASE("Player websocket connection passes when token and player position match")
+{
+    Game::Game sut{};
+
+    sut.JoinPlayer(102, "abc", gameId);
+    sut.JoinPlayer(12, "lol", gameId);
+
+    CHECK(sut.ConnectPlayerWebSocket("abc", "1").first);
+    CHECK(sut.ConnectPlayerWebSocket("lol", "2").first);
+}
 
 

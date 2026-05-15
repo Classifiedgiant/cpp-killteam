@@ -1,5 +1,5 @@
-#ifndef KILLTEAM_SRC_GAME_GAMESTATE_H
-#define KILLTEAM_SRC_GAME_GAMESTATE_H
+#ifndef KILLTEAM_SRC_GAME_H
+#define KILLTEAM_SRC_GAME_H
 
 #include <optional>
 #include <string>

@@ -8,9 +8,12 @@
 #include "Player.hpp"
 
 Game::Game::Game()
-: players_() {}
+: gameId_{""}
+, players_{} {}
+// , currentState_{} {}
 
-[[nodiscard]] bool Game::Game::IsPlayerInGame(std::uint32_t playerId) noexcept 
+
+[[nodiscard]] bool Game::Game::IsPlayerInGame(std::uint32_t playerId) noexcept
 {
     if (players_.first.has_value() && players_.first->GetPlayerPosition() == playerId)
         return true;
@@ -21,7 +24,7 @@ Game::Game::Game()
     return false;
 }
 
-[[nodiscard]] bool Game::Game::IsFull() noexcept 
+[[nodiscard]] bool Game::Game::IsFull() noexcept
 {
     return players_.first.has_value() && players_.second.has_value();
 }
@@ -74,23 +77,22 @@ void Game::Game::SetGameId(const std::string gameId)
     gameId_  = gameId;
 }
 
-std::pair<bool, std::string> Game::Game::ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition)
+std::pair<bool, std::string> Game::Game::ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition, drogon::WebSocketConnectionPtr conn)
 {
-
-    if (wsToken.empty() || playerPosition.empty())
-        return {false, "Player Token or Player position is empty"};
+    if (wsToken.empty() || playerPosition.empty()) return {false, "Player Token or Player position is empty"};
 
     try
     {
-
         const auto playerPos = static_cast<unsigned int>(std::stoull(std::string(playerPosition)));
-        const auto player = GetPlayer(playerPos);
+        auto player = GetPlayer(playerPos);
 
         if (!player)
             return {false, "Player not in game"};
 
         if (player->GetConnectionToken() != wsToken)
             return {false, "Player can't access game"};
+
+        player->SetWebsocketConnected(conn);
     }
     catch (const std::exception& ex)
     {
@@ -98,6 +100,17 @@ std::pair<bool, std::string> Game::Game::ConnectPlayerWebSocket(std::string_view
         return {false, "Player not in game"};
     }
 
-    return {true, ""};
+    if (IsBothPlayerWebSocketConnected())
+        NotifyPlayers("StartGame");
+    else
+        conn->send("WaitingForPlayers");
 
+
+    return {true, ""};
+}
+
+void Game::Game::NotifyPlayers(std::string jsonMsg)
+{
+    players_.first->SendMsg(jsonMsg);
+    players_.second->SendMsg(jsonMsg);
 }

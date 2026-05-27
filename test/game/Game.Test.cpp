@@ -62,8 +62,8 @@ TEST_CASE("Player websocket connections fails when either token or playerPositio
 {
     Game::Game sut{};
 
-    CHECK_FALSE(sut.ConnectPlayerWebSocket("", "randomVal").first);
-    CHECK_FALSE(sut.ConnectPlayerWebSocket("ablsdofdsfo", "").first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("", "randomVal", nullptr).first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("ablsdofdsfo", "", nullptr).first);
 }
 
 TEST_CASE("Player websocket connections fails when either playerPosition is not convertable to values 1 or 2")
@@ -74,9 +74,9 @@ TEST_CASE("Player websocket connections fails when either playerPosition is not 
     sut.JoinPlayer(1234, "abc", gameId);
     sut.JoinPlayer(102, "def", gameId);
 
-    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "10239").first);
-    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "abc").first);
-    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "abc1").first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "10239", nullptr).first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "abc", nullptr).first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("abc", "abc1", nullptr).first);
 }
 
 TEST_CASE("Player websocket connections fails when token doesn't match token")
@@ -85,7 +85,7 @@ TEST_CASE("Player websocket connections fails when token doesn't match token")
 
     sut.JoinPlayer(1234, "abc", gameId);
 
-    CHECK_FALSE(sut.ConnectPlayerWebSocket("def", "1").first);
+    CHECK_FALSE(sut.ConnectPlayerWebSocket("def", "1", nullptr).first);
 }
 
 TEST_CASE("Player websocket connection passes when token and player position match")
@@ -95,8 +95,8 @@ TEST_CASE("Player websocket connection passes when token and player position mat
     sut.JoinPlayer(102, "abc", gameId);
     sut.JoinPlayer(12, "lol", gameId);
 
-    CHECK(sut.ConnectPlayerWebSocket("abc", "1").first);
-    CHECK(sut.ConnectPlayerWebSocket("lol", "2").first);
+    CHECK(sut.ConnectPlayerWebSocket("abc", "1", nullptr).first);
+    CHECK(sut.ConnectPlayerWebSocket("lol", "2", nullptr).first);
 }
 
 

@@ -16,13 +16,10 @@ extern std::unique_ptr<Game::Game> game;
 void Controllers::GameWsController::handleNewConnection(const drogon::HttpRequestPtr& req,
                                                     const drogon::WebSocketConnectionPtr& conn)
 {
-    game->ConnectPlayerWebSocket(req->getParameter("wsToken"), req->getParameter("playerPosition"));
-
     const auto playerToken    = req->getParameter("wsToken");
     const auto playerPositionStr = req->getParameter("playerPosition");
 
-
-    const auto [succeeded, errMsg] = game->ConnectPlayerWebSocket(playerToken, playerPositionStr);
+    const auto [succeeded, errMsg] = game->ConnectPlayerWebSocket(playerToken, playerPositionStr, conn);
     if (!succeeded)
         conn->shutdown(drogon::CloseCode::kViolation, errMsg);
 }
@@ -53,5 +50,4 @@ void Controllers::GameWsController::handleNewMessage(const drogon::WebSocketConn
         conn->sendJson(errorJson);
         return;
     }
-
 }

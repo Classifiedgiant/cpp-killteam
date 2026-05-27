@@ -27,7 +27,6 @@ void Controllers::CreateGameController::joinGame(const drogon::HttpRequestPtr& r
         // send a websocket connection for game related
         Json::Value returnJson{};
 
-
         const auto gameId = Util::GenerateAlphaNumericString(5);
         const auto wsToken = Util::GenerateAlphaNumericString(10);
         game_.JoinPlayer(userId, wsToken, gameId);

@@ -4,18 +4,25 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <utility>
 
+#include <json/json.h>
+
+// #include "game_states/IGameState.hpp"
 #include "Player.hpp"
+
 
 namespace Game
 {
 class Game
 {
-std::string gameId_;
-std::string connectionToken_;
+std::string gameId_ = {};
 
 std::pair<std::optional<Player>, std::optional<Player>> players_;
+
+// TODO: Add back later
+// GameStates::IGameState* currentState_ = nullptr;
 
 public:
 Game();
@@ -30,7 +37,12 @@ void JoinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::st
 std::string GetGameId() const noexcept { return gameId_; };
 void SetGameId(const std::string gameId);
 
-std::pair<bool, std::string> ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition);
+std::pair<bool, std::string> ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition, drogon::WebSocketConnectionPtr conn);
+
+void NotifyPlayers(std::string jsonMsg);
+
+private:
+bool IsBothPlayerWebSocketConnected() const { return players_.first->IsWebSocketConnected() && players_.second->IsWebSocketConnected(); };
 };
 }
 

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message StartGame {
+    int32 playerGoingFirst = 1;
+    Army player1Army = 2;
+    Army player2Army = 3;
+}
+
+message Army {
+    string name = 1;
+}

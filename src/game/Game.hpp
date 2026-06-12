@@ -14,8 +14,6 @@
 // needed for HasCreateStateCommand state
 #include "game_states/StartGameState.hpp"
 
-#include "startgame.pb.h"
-
 
 namespace Game
 {

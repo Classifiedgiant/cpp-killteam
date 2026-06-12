@@ -5,13 +5,9 @@
 #include <random>
 #include <utility>
 
-#include "startgame.pb.h"
+#include "start_game.pb.h"
 
-// concept to enforce
-template<typename T, typename... Args>
-concept HasCreateStateCommand = requires(Args... args) {
-    { T::CreateStateCommand(args...) };
-};
+#include "StateConcepts.hpp"
 
 namespace GameState
 {

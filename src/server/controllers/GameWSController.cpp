@@ -5,8 +5,9 @@
 #include <json/json.h>
 
 #include "Game.hpp"
+#include "game_states/StartGameState.hpp"
+#include "game_states/WaitingForPlayerState.hpp"
 
-#include "startgame.pb.h"
 
 // declared in the main.cpp
 // due to unable to pass in the constructor
@@ -30,17 +31,13 @@ void Controllers::GameWsController::handleNewConnection(const drogon::HttpReques
     if (game->IsFull())
     {
         // if all players have joined, then start the game.
-        // game->NotifyPlayers("StartGame");
         game->NotifyPlayersOfStateChange<GameState::StartGameState>();
     }
     else 
     {
-
         // we are still waiting on one player.
         // The player connected needs to wait before the other player joins.
-        
-        // this gamestate doesn't exist 
-        // game->NotifyPlayers("WaitingForPlayers");
+        game->NotifyPlayersOfStateChange<GameState::WaitingForPlayerState>();
     }
 }
 

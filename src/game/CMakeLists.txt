@@ -8,7 +8,8 @@ add_library(${PROJECT_NAME}
     Player.cpp
 
     # Proto files
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/startgame.proto)
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/start_game.proto
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/waiting_for_player.proto)
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC

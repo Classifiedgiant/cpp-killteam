@@ -100,12 +100,6 @@ std::pair<bool, std::string> Game::Game::ConnectPlayerWebSocket(std::string_view
         return {false, "Player not in game"};
     }
 
-    if (IsBothPlayerWebSocketConnected())
-        NotifyPlayers("StartGame");
-    else
-        conn->send("WaitingForPlayers");
-
-
     return {true, ""};
 }
 

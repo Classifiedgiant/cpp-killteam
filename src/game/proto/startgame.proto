@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package GameStates;
+
 message StartGame {
     int32 playerGoingFirst = 1;
     Army player1Army = 2;

@@ -6,7 +6,7 @@
 
 namespace Util
 {
-    static drogon::HttpResponsePtr Create400JsonResponse(const Json::Value& json)
+    inline drogon::HttpResponsePtr Create400JsonResponse(const Json::Value& json)
     {
         const auto response = drogon::HttpResponse::newHttpJsonResponse(json);
         response->setStatusCode(drogon::k400BadRequest);

@@ -9,8 +9,12 @@
 
 #include <json/json.h>
 
-// #include "game_states/IGameState.hpp"
 #include "Player.hpp"
+
+// needed for HasCreateStateCommand state
+#include "game_states/StartGameState.hpp"
+
+#include "startgame.pb.h"
 
 
 namespace Game
@@ -40,6 +44,23 @@ void SetGameId(const std::string gameId);
 std::pair<bool, std::string> ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition, drogon::WebSocketConnectionPtr conn);
 
 void NotifyPlayers(std::string jsonMsg);
+
+template<typename T, typename... Args>
+requires HasCreateStateCommand<T, Args...>
+void NotifyPlayersOfStateChange(Args&&... args) {
+
+    auto stateMessage = T::CreateStateCommand(std::forward<Args>(args)...);
+
+
+    std::string serializeStr{};
+    stateMessage.SerializeToString(&serializeStr);
+
+    if (players_.first.has_value())
+        players_.first->SendMsg(serializeStr);
+
+    if (players_.second.has_value())
+        players_.second->SendMsg(serializeStr);
+}
 
 private:
 bool IsBothPlayerWebSocketConnected() const { return players_.first->IsWebSocketConnected() && players_.second->IsWebSocketConnected(); };

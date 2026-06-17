@@ -3,7 +3,7 @@ syntax = "proto3";
 package GameStates;
 
 message StartGame {
-    int32 playerGoingFirst = 1;
+    GameType gameType = 1;
     Army player1Army = 2;
     Army player2Army = 3;
 }
@@ -11,3 +11,8 @@ message StartGame {
 message Army {
     string name = 1;
 }
+
+enum GameType {
+    GAMETYPE_FREE_FOR_ALL = 0;
+}
+

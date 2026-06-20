@@ -8,11 +8,22 @@ message StartGame {
     Army player2Army = 3;
 }
 
-message Army {
-    string name = 1;
-}
-
 enum GameType {
     GAMETYPE_FREE_FOR_ALL = 0;
 }
 
+message Army {
+    string name = 1;
+    repeated Operator operative = 2;
+}
+
+message Operator {
+    string name = 1;
+    uint32 movememnt = 2;
+    uint32 actionPointLimit = 3;
+    uint32 groupActivation = 4;
+    uint32 defense = 5;
+    uint32 save = 6;
+    uint32 wounds = 7;
+    repeated string keywords = 9;
+}

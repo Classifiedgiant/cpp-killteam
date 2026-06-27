@@ -24,7 +24,6 @@ static GameStates::StartGame CreateStateCommand() noexcept {
     std::bernoulli_distribution dist(0.5);
 
     GameStates::StartGame msg{};
-    msg.set_playergoingfirst(dist(gen) ? 1 : 2);
 
     msg.mutable_player1army()->set_name("Player 1 Army");
     msg.mutable_player2army()->set_name("Player 2 Army");

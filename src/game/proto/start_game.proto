@@ -4,8 +4,11 @@ package GameStates;
 
 message StartGame {
     GameType gameType = 1;
-    Army player1Army = 2;
-    Army player2Army = 3;
+    uint32 player1 = 2;
+    uint32 player2 = 3;
+    Army player1Army = 4;
+    Army player2Army = 5;
+    Level level = 6;
 }
 
 enum GameType {
@@ -26,4 +29,19 @@ message Operator {
     uint32 save = 6;
     uint32 wounds = 7;
     repeated string keywords = 9;
+}
+
+message Level {
+    string resource = 1;
+}
+
+message SpawnArea {
+    Point topLeft = 1;
+    float width = 2;
+    float length = 3;
+}
+
+message Point {
+    float x = 1;
+    float y = 2;
 }

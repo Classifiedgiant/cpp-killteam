@@ -31,7 +31,7 @@ void Controllers::GameWsController::handleNewConnection(const drogon::HttpReques
     if (game->IsFull())
     {
         // if all players have joined, then start the game.
-        game->NotifyPlayersOfStateChange<GameState::StartGameState>();
+        game->NotifyPlayersOfStateChange<GameState::StartGameState>(game->GetPlayer(1)->GetPlayerId(), game->GetPlayer(2)->GetPlayerId());
     }
     else 
     {

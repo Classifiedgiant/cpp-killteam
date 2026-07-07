@@ -84,7 +84,7 @@ TEST_CASE("joinGame returns 400 when game rejects player")
     CHECK(resp->getStatusCode() == drogon::k400BadRequest);
 }
 
-TEST_CASE("joinGame returns 400 when same player attempts to join more than once")
+TEST_CASE("joinGame returns 200 when same player attempts to join more than once")
 {
     Game::Game game;
     Controllers::CreateGameController sut{game};
@@ -94,11 +94,38 @@ TEST_CASE("joinGame returns 400 when same player attempts to join more than once
     auto req = drogon::HttpRequest::newHttpJsonRequest(body);
 
     CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k200OK);
-    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k400BadRequest);
+    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k200OK);
 
     // player position
     body["userId"] = "2";
     req = drogon::HttpRequest::newHttpJsonRequest(body);
     CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k200OK);
-    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k400BadRequest);
+    CHECK(callJoinGame(sut, req)->getStatusCode() == drogon::k200OK);
+}
+
+TEST_CASE("joinGame returns the same gameId, wsToken when called by the same user multiple times")
+{
+    Game::Game game;
+    Controllers::CreateGameController sut{game};
+
+    Json::Value body;
+    body["userId"] = "1";
+    auto req = drogon::HttpRequest::newHttpJsonRequest(body);
+
+    const auto resp = callJoinGame(sut, req);
+
+    REQUIRE(resp != nullptr);
+    CHECK(resp->getStatusCode() == drogon::k200OK);
+    auto json = resp->getJsonObject();
+    REQUIRE(json != nullptr);
+    CHECK(json->isMember("gameId"));
+    CHECK(json->isMember("wsToken"));
+
+    const auto prevGameId = (*json)["gameId"].asString();
+    const auto prevWsToken = (*json)["wsToken"].asString();
+
+    // second call
+    json = callJoinGame(sut, req)->getJsonObject();
+    CHECK((*json)["gameId"].asString() == prevGameId);
+    CHECK((*json)["wsToken"].asString() == prevWsToken);
 }

@@ -16,23 +16,32 @@ void Controllers::CreateGameController::joinGame(const drogon::HttpRequestPtr& r
     }
 
     const auto userId = std::stoi((*json)["userId"].asString());
-    if (game_.IsPlayerInGame(userId) || game_.IsFull())
+    if (!game_.IsPlayerInGame(userId) && game_.IsFull())
     {
         Json::Value errorJson{};
         errorJson["error"] = "Failed to add player";
         callback(Util::Create400JsonResponse(errorJson));
     }
+    else if (game_.IsPlayerInGame(userId))
+    {
+        // resend players connection details
+        Json::Value returnJson{};
+        returnJson["gameId"] =  game_.GetGameId();
+        returnJson["wsToken"] = game_.GetPlayer(userId)->GetConnectionToken();
+        const auto resp = drogon::HttpResponse::newHttpJsonResponse(returnJson);
+        callback(resp);
+    }
     else
     {
         // send a websocket connection for game related
-        Json::Value returnJson{};
 
         const auto gameId = Util::GenerateAlphaNumericString(5);
         const auto wsToken = Util::GenerateAlphaNumericString(10);
         game_.JoinPlayer(userId, wsToken, gameId);
-
         game_.SetGameId(gameId);
-        returnJson["gameId"] =  game_.GetGameId();
+
+        Json::Value returnJson{};
+        returnJson["gameId"] = gameId;
         returnJson["wsToken"] = wsToken;
         returnJson["playerPosition"] = game_.IsFull() ? 2 : 1;
         const auto resp = drogon::HttpResponse::newHttpJsonResponse(returnJson);

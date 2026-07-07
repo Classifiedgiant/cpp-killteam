@@ -11,7 +11,7 @@ namespace Controllers
 
 class CreateGameController : public drogon::HttpController<CreateGameController, false>
 {
-    Game::Game game_;
+Game::Game& game_;
 public:
 
     CreateGameController(Game::Game& game) : game_(game) {}

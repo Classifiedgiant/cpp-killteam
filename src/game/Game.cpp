@@ -15,10 +15,10 @@ Game::Game::Game()
 
 [[nodiscard]] bool Game::Game::IsPlayerInGame(std::uint32_t playerId) noexcept
 {
-    if (players_.first.has_value() && players_.first->GetPlayerPosition() == playerId)
+    if (players_.first.has_value() && players_.first->GetPlayerId() == playerId)
         return true;
 
-    if (players_.second.has_value() && players_.second->GetPlayerPosition() == playerId)
+    if (players_.second.has_value() && players_.second->GetPlayerId() == playerId)
         return true;
 
     return false;
@@ -49,21 +49,16 @@ void Game::Game::JoinPlayer(std::uint32_t playerId, std::string gameConnectionTo
         players_.first = Player(playerId, gameConnectionToken, gameId, 1);
 }
 
-[[nodiscard]] std::optional<Game::Player> Game::Game::GetPlayer(unsigned int player) noexcept
+[[nodiscard]] std::optional<Game::Player> Game::Game::GetPlayer(unsigned int playerId) noexcept
 {
-    switch (player)
-    {
-        case 1:
-            return players_.first;
-        case 2:
-            return players_.second;
 
-        default:
-        {
-            std::cout << "Player " << player << " not found.\n";
-            return {};
-        }
-    }
+    if (players_.first && players_.first->GetPlayerId() == playerId)
+        return players_.first;
+    else if (players_.second && players_.second->GetPlayerId() == playerId)
+        return players_.second;
+
+    std::cout << "Player " << playerId << " not found.\n";
+        return {};
 }
 
 void Game::Game::SetGameId(const std::string gameId)

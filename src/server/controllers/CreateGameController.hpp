@@ -12,14 +12,15 @@ namespace Controllers
 class CreateGameController : public drogon::HttpController<CreateGameController, false>
 {
 Game::Game& game_;
+
 public:
 
-    CreateGameController(Game::Game& game) : game_(game) {}
+CreateGameController(Game::Game& game) : game_(game) {}
 
-    void joinGame(const drogon::HttpRequestPtr& req,
-        std::function<void (const drogon::HttpResponsePtr &)> &&callback);
-    METHOD_LIST_BEGIN
-    METHOD_LIST_END
+void joinGame(const drogon::HttpRequestPtr& req,
+    std::function<void (const drogon::HttpResponsePtr &)> &&callback);
+METHOD_LIST_BEGIN
+METHOD_LIST_END
 };
 }
 

@@ -99,4 +99,11 @@ TEST_CASE("Player websocket connection passes when token and player position mat
     CHECK(sut.ConnectPlayerWebSocket("lol", "2", nullptr).first);
 }
 
+TEST_CASE("Game returns empty optional when looking for player in empty game")
+{
+    Game::Game sut{};
+
+    CHECK_FALSE(sut.GetPlayer(12312).has_value());
+}
+
 

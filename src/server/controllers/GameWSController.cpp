@@ -19,9 +19,9 @@ void Controllers::GameWsController::handleNewConnection(const drogon::HttpReques
                                                     const drogon::WebSocketConnectionPtr& conn)
 {
     const auto playerToken    = req->getParameter("wsToken");
-    const auto playerPositionStr = req->getParameter("playerPosition");
+    const auto playerId = req->getParameter("playerId");
 
-    const auto [succeeded, errMsg] = game->ConnectPlayerWebSocket(playerToken, playerPositionStr, conn);
+    const auto [succeeded, errMsg] = game->ConnectPlayerWebSocket(playerToken, playerId, conn);
     if (!succeeded)
     {
         conn->shutdown(drogon::CloseCode::kViolation, errMsg);

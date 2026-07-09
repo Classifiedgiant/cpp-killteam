@@ -14,6 +14,7 @@
 // needed for HasCreateStateCommand state
 #include "game_states/StartGameState.hpp"
 
+using Players = std::pair<std::optional<Game::Player>, std::optional<Game::Player>>;
 
 namespace Game
 {
@@ -21,7 +22,7 @@ class Game
 {
 std::string gameId_ = {};
 
-std::pair<std::optional<Player>, std::optional<Player>> players_;
+Players players_;
 
 // TODO: Add back later
 // GameStates::IGameState* currentState_ = nullptr;
@@ -34,7 +35,8 @@ Game();
 
 void JoinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept;
 
-[[nodiscard]] std::optional<Player> GetPlayer(unsigned int playerId) noexcept;
+[[nodiscard]] Player* GetPlayer(unsigned int playerId) noexcept;
+[[nodiscard]] const Players& GetAllPlayers() noexcept { return players_; }
 
 std::string GetGameId() const noexcept { return gameId_; };
 void SetGameId(const std::string gameId);

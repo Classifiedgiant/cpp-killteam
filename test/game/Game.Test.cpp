@@ -42,7 +42,7 @@ TEST_CASE("Game cannot join the same player again")
 
     JoinPlayer(sut, CreatePlayer(2));
     JoinPlayer(sut, CreatePlayer(2));
-    CHECK(sut.IsFull());
+    CHECK_FALSE(sut.IsFull());
     CHECK(sut.IsPlayerInGame(2));
 }
 
@@ -88,22 +88,22 @@ TEST_CASE("Player websocket connections fails when token doesn't match token")
     CHECK_FALSE(sut.ConnectPlayerWebSocket("def", "1", nullptr).first);
 }
 
-TEST_CASE("Player websocket connection passes when token and player position match")
+TEST_CASE("Player websocket connection passes when token match")
 {
     Game::Game sut{};
 
     sut.JoinPlayer(102, "abc", gameId);
     sut.JoinPlayer(12, "lol", gameId);
 
-    CHECK(sut.ConnectPlayerWebSocket("abc", "1", nullptr).first);
-    CHECK(sut.ConnectPlayerWebSocket("lol", "2", nullptr).first);
+    CHECK(sut.ConnectPlayerWebSocket("abc", "102", nullptr).first);
+    CHECK(sut.ConnectPlayerWebSocket("lol", "12", nullptr).first);
 }
 
-TEST_CASE("Game returns empty optional when looking for player in empty game")
+TEST_CASE("Game returns nullptr when looking for player in empty game")
 {
     Game::Game sut{};
 
-    CHECK_FALSE(sut.GetPlayer(12312).has_value());
+    CHECK(sut.GetPlayer(12312) == nullptr);
 }
 
 

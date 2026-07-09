@@ -97,9 +97,3 @@ std::pair<bool, std::string> Game::Game::ConnectPlayerWebSocket(std::string_view
 
     return {true, ""};
 }
-
-void Game::Game::NotifyPlayers(std::string jsonMsg)
-{
-    players_.first->SendMsg(jsonMsg);
-    players_.second->SendMsg(jsonMsg);
-}

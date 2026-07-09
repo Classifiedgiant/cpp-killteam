@@ -41,8 +41,6 @@ void SetGameId(const std::string gameId);
 
 std::pair<bool, std::string> ConnectPlayerWebSocket(std::string_view wsToken, std::string_view playerPosition, drogon::WebSocketConnectionPtr conn);
 
-void NotifyPlayers(std::string jsonMsg);
-
 template<typename T, typename... Args>
 requires HasCreateStateCommand<T, Args...>
 void NotifyPlayersOfStateChange(Args&&... args) {

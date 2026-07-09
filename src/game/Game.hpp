@@ -37,7 +37,6 @@ Game();
 void JoinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept;
 
 [[nodiscard]] Player* GetPlayer(unsigned int playerId) noexcept;
-[[nodiscard]] const Players& GetAllPlayers() noexcept { return players_; }
 
 std::string GetGameId() const noexcept { return gameId_; };
 void SetGameId(const std::string gameId);

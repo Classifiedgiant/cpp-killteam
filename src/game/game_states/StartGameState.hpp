@@ -43,7 +43,8 @@ static GameStates::Army CreatePlayer1Army()
     op->set_defense(4);
     op->set_save(3);
     op->set_wounds(2);
-    op->set_keywords(0, "Imperial");
+    auto keyword = op->add_keywords();
+    *keyword = "Imperial";
 
     return army;
 }
@@ -61,7 +62,8 @@ static GameStates::Army CreatePlayer2Army()
     op->set_defense(5);
     op->set_save(3);
     op->set_wounds(4);
-    op->set_keywords(0, "Orks");
+    auto keyword = op->add_keywords();
+    *keyword = "Orks";
 
     return army;
 }

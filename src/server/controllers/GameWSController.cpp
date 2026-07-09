@@ -49,22 +49,4 @@ void Controllers::GameWsController::handleNewMessage(const drogon::WebSocketConn
                                                         std::string&& message,
                                                         const drogon::WebSocketMessageType& type)
 {
-    if (type != drogon::WebSocketMessageType::Text)
-    {
-        Json::Value errorJson{};
-        errorJson["error"] = "Incorrect WebSocket Message Type. Needs to be Text";
-        conn->sendJson(errorJson);
-        return;
-    }
-
-    Json::Value body;
-    Json::Reader reader;
-
-    if (!reader.parse(message, body))
-    {
-        Json::Value errorJson{};
-        errorJson["error"] = "Invalid Json";
-        conn->sendJson(errorJson);
-        return;
-    }
 }

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package GameStates;
+
+import "start_game.proto";
+import "waiting_for_player.proto";
+
+message ServerMessage {
+    oneof payload {
+        StartGame startGame = 1;
+        WaitingForPlayer waitingForPlayer = 2;
+    }
+}

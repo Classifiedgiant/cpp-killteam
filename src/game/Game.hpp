@@ -12,7 +12,8 @@
 #include "Player.hpp"
 
 // needed for HasCreateStateCommand state
-#include "game_states/StartGameState.hpp"
+#include "game_states/StateConcepts.hpp"
+#include "server_message.pb.h"
 
 using Players = std::pair<std::optional<Game::Player>, std::optional<Game::Player>>;
 
@@ -47,11 +48,14 @@ template<typename T, typename... Args>
 requires HasCreateStateCommand<T, Args...>
 void NotifyPlayersOfStateChange(Args&&... args) {
 
+    std::cout << "Notifying players...\n";
     auto stateMessage = T::CreateStateCommand(std::forward<Args>(args)...);
 
+    GameStates::ServerMessage envelope{};
+    SetServerMessagePayload(envelope, stateMessage);
 
     std::string serializeStr{};
-    stateMessage.SerializeToString(&serializeStr);
+    envelope.SerializeToString(&serializeStr);
 
     if (players_.first.has_value())
         players_.first->SendMsg(serializeStr);
@@ -61,6 +65,14 @@ void NotifyPlayersOfStateChange(Args&&... args) {
 }
 
 private:
+static void SetServerMessagePayload(GameStates::ServerMessage& envelope, const GameStates::StartGame& msg) {
+    *envelope.mutable_startgame() = msg;
+}
+
+static void SetServerMessagePayload(GameStates::ServerMessage& envelope, const GameStates::WaitingForPlayer& msg) {
+    *envelope.mutable_waitingforplayer() = msg;
+}
+
 bool IsBothPlayerWebSocketConnected() const { return players_.first->IsWebSocketConnected() && players_.second->IsWebSocketConnected(); };
 };
 }

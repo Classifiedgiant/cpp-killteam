@@ -34,7 +34,7 @@ public:
     // connectioninfo
     bool IsWebSocketConnected() const { return webSocketConnection_ == nullptr;};
     void SetWebsocketConnected(const drogon::WebSocketConnectionPtr connection) { webSocketConnection_ = connection; };
-    void SendMsg(std::string jsonMsg);
+    void SendMsg(std::string dataBuf);
 };
 }
 

@@ -8,11 +8,11 @@ Player::Player(std::uint32_t playerId, std::string gameConnectionToken, std::str
     , playerPosition_{playerPosition}
 {}
 
-void Player::SendMsg(std::string jsonMsg)
+void Player::SendMsg(std::string dataBuf)
 {
     if (webSocketConnection_)
     {
-        webSocketConnection_->send(jsonMsg);
+        webSocketConnection_->send(dataBuf, drogon::WebSocketMessageType::Binary);
         return;
     }
 

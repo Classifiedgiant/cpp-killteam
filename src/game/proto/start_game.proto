@@ -29,10 +29,12 @@ message Operator {
     uint32 save = 6;
     uint32 wounds = 7;
     repeated string keywords = 9;
+    Resource model = 10;
 }
 
 message Level {
-    string resource = 1;
+    string name = 1;
+    Resource model = 2;
 }
 
 message SpawnArea {
@@ -44,4 +46,8 @@ message SpawnArea {
 message Point {
     float x = 1;
     float y = 2;
+}
+
+message Resource {
+    string modelPath = 1;
 }

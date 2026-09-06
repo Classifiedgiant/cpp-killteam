@@ -46,6 +46,7 @@ static GameStates::Army CreatePlayer1Army()
     auto keyword = op->add_keywords();
     *keyword = "Imperial";
 
+    op->mutable_model()->set_modelpath("imperial_guard.glb");
     return army;
 }
 
@@ -65,14 +66,14 @@ static GameStates::Army CreatePlayer2Army()
     auto keyword = op->add_keywords();
     *keyword = "Orks";
 
+    op->mutable_model()->set_modelpath("ork.glb");
     return army;
 }
 
 static GameStates::Level CreateLevel()
 {
     GameStates::Level level{};
-    level.set_resource("level_1.ods");
-
+    level.mutable_model()->set_modelpath("favela.glb");
     return level;
 }
 

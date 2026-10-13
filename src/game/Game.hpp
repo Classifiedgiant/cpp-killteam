@@ -2,9 +2,9 @@
 #define KILLTEAM_SRC_GAME_H
 
 #include <optional>
+#include <print>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 #include <utility>
 
 #include <json/json.h>
@@ -36,6 +36,7 @@ Game();
 
 void JoinPlayer(std::uint32_t playerId, std::string gameConnectionToken, std::string gameId) noexcept;
 
+[[nodiscard]] Players& GetPlayers() { return players_; }
 [[nodiscard]] Player* GetPlayer(unsigned int playerId) noexcept;
 
 std::string GetGameId() const noexcept { return gameId_; };
@@ -47,7 +48,7 @@ template<typename T, typename... Args>
 requires HasCreateStateCommand<T, Args...>
 void NotifyPlayersOfStateChange(Args&&... args) {
 
-    std::cout << "Notifying players...\n";
+    std::println("Notifying players...");
     auto stateMessage = T::CreateStateCommand(std::forward<Args>(args)...);
 
     GameStates::ServerMessage envelope{};
@@ -57,10 +58,16 @@ void NotifyPlayersOfStateChange(Args&&... args) {
     envelope.SerializeToString(&serializeStr);
 
     if (players_.first.has_value())
+    {
+        std::println("Sending Player one data");
         players_.first->SendMsg(serializeStr);
+    }
 
     if (players_.second.has_value())
+    {
+        std::println("Sending Player two data");
         players_.second->SendMsg(serializeStr);
+    }
 }
 
 private:

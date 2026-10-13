@@ -1,7 +1,7 @@
 #ifndef KILLTEAM_SRC_GAME_GAME_STATE_STARTGAMESTATE_H
 #define KILLTEAM_SRC_GAME_GAME_STATE_STARTGAMESTATE_H
 
-#include <utility>
+#include <print>
 
 #include "start_game.pb.h"
 
@@ -15,6 +15,8 @@ class StartGameState
 public:
 static GameStates::StartGame CreateStateCommand(uint32_t player1Id, uint32_t player2Id) noexcept
 {
+    std::println("Creating Start Game message...");
+
     GameStates::StartGame msg{};
 
     msg.set_gametype(GameStates::GameType::GAMETYPE_FREE_FOR_ALL);
@@ -26,6 +28,7 @@ static GameStates::StartGame CreateStateCommand(uint32_t player1Id, uint32_t pla
     *msg.mutable_player2army() = CreatePlayer2Army();
 
     *msg.mutable_level() = CreateLevel();
+
     return msg;
 }
 

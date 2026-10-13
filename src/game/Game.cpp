@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include <iostream>
-#include <stdexcept>
+#include <print>
 #include <string>
 
 #include "Player.hpp"
@@ -33,16 +33,17 @@ void Game::Game::JoinPlayer(std::uint32_t playerId, std::string gameConnectionTo
 {
     if (IsFull())
     {
-        std::cout << "Game is full\n";
+        std::println("Game is full");
         return;
     }
 
     if (IsPlayerInGame(playerId))
     {
-        std::cout << "Player already in the game\n";
+        std::println("Player already in the game");
         return;
     }
 
+    std::println("Adding player {} to game {}", playerId, gameId);
     if (players_.first.has_value())
         players_.second = Player(playerId, gameConnectionToken, gameId, 2);
     else

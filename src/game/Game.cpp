@@ -58,7 +58,7 @@ void Game::Game::JoinPlayer(std::uint32_t playerId, std::string gameConnectionTo
     else if (players_.second && players_.second->GetPlayerId() == playerId)
         return &players_.second.value();
 
-    std::cout << "Player " << playerId << " not found.\n";
+    std::println("Player {} not found", playerId);
     return nullptr;
 }
 
@@ -66,7 +66,7 @@ void Game::Game::SetGameId(const std::string gameId)
 {
     if (!this->gameId_.empty())
     {
-        std::cout << "Game Id is already set\n";
+        std::println("Game Id is already set");
         return;
     }
 

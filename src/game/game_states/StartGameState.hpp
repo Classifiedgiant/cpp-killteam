@@ -5,8 +5,6 @@
 
 #include "start_game.pb.h"
 
-#include "StateConcepts.hpp"
-
 namespace GameState
 {
 class StartGameState
